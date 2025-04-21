@@ -6,22 +6,7 @@ import { motion } from "motion/react";
 import { useMemo, useState } from "react";
 import Container from "../components/layout/Container/Container";
 import Header from "../components/layout/Header/Header";
-
-interface Flight {
-  flightIdentifier: string;
-  flightNumber: string;
-  airport: string;
-  date: string;
-  expectedTime: string;
-  originalTime: string;
-  url: string;
-  score: string;
-}
-
-interface FlightsResponse {
-  flights: Flight[];
-  error?: string;
-}
+import { Flight, FlightsResponse } from "../types";
 
 // fetch flights from the API (server side)
 export async function loader() {
@@ -43,9 +28,8 @@ export async function loader() {
 }
 
 // constants
-const DEBOUNCE_DELAY = 300; // 300ms debounce delay
-const MIN_QUERY_LENGTH = 3; // Minimum query length to trigger search
-const MAX_RESULTS = 10; // Maximum number of results to display
+const DEBOUNCE_DELAY = 300;
+const MIN_QUERY_LENGTH = 3;
 
 export default function Index() {
   const flights = useLoaderData<Flight[]>();
@@ -127,16 +111,16 @@ export default function Index() {
         </div>
 
         {/* Display results */}
-        {query && query.length > MIN_QUERY_LENGTH && filteredFlights.length === 0 ? (
+        {query && query.length >= MIN_QUERY_LENGTH && filteredFlights.length === 0 ? (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ ease: "easeIn", duration: 0.25, delay: 0.2 }}
-            className="text-xl text-center text-gray-600"
+            className="text-xl text-center text-gray-400"
           >
             No flights found.
           </motion.div>
-        ) : (
+        ) : query && query.length >= MIN_QUERY_LENGTH ? (
           <div className="grid gap-6">
             {filteredFlights.map((flight) => (
               <div key={flight.flightIdentifier} className="border rounded-lg p-4 shadow-sm">
@@ -153,7 +137,7 @@ export default function Index() {
               </div>
             ))}
           </div>
-        )}
+        ) : null}
       </Container>
     </>
   );
