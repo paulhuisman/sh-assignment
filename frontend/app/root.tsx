@@ -21,6 +21,11 @@ export const links: LinksFunction = () => [
     type: "font/ttf",
     crossOrigin: "anonymous",
   },
+  {
+    rel: "preload",
+    href: "https://cdn.schiphol.nl/web/flights/assets/flight-search-asset-CjvqQkFT.png",
+    as: "image",
+  },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
