@@ -2,9 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "NeueFrutigerWorld-Regular";
+  src: url("/fonts/NeueFrutigerWorld-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
+  @apply bg-white dark:bg-schiphol-blue;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
