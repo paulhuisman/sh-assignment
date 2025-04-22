@@ -66,7 +66,7 @@ export const FlightSearchOverview = ({ flights }: FlightSearchOverviewProps) => 
   return (
     <Container>
       <div className="relative flex justify-center items-center w-full -mt-36">
-        <div className="bg-grey-few mb-20 z-40 rounded-md shadow-md  px-4 lg:px-24 pt-12 pb-0 lg:pb-6 w-full lg:w-[600px]">
+        <div className="bg-grey-few mb-10 lg:mb-16 z-40 rounded-md shadow-md px-4 lg:px-24 pt-12 pb-0 lg:pb-6 w-full lg:w-[600px]">
           <div className="flex flex-col gap-8 items-center justify-center relative w-full">
             <img
               src="https://cdn.schiphol.nl/web/flights/assets/flight-search-asset-CjvqQkFT.png"
@@ -79,7 +79,7 @@ export const FlightSearchOverview = ({ flights }: FlightSearchOverviewProps) => 
                 placeholder="Search for destination or flight number"
                 value={query}
                 onChange={handleSearchChange}
-                className="border bg-white text-black border-gray-300 p-3 rounded-lg w-full max-w-md bg-transparent placeholder-slate-500 focus:ring-2 focus:ring-schiphol-blue focus:outline-none"
+                className="border bg-white text-black border-grey-broken p-3 rounded-lg w-full max-w-md bg-transparent placeholder-grey-storm focus:ring-2 focus:ring-afternoon-blue focus:outline-none"
               />
               <AnimatePresence>
                 {query.length > 0 ? (
@@ -148,7 +148,7 @@ export const FlightSearchOverview = ({ flights }: FlightSearchOverviewProps) => 
               </select>
             </div>
             <motion.div
-              className="grid gap-6 lg:grid-cols-2 min-h-[300px]"
+              className="grid gap-4 lg:gap-6 lg:grid-cols-2 min-h-[300px]"
               variants={containerVariants}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
