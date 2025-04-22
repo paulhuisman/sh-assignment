@@ -16,7 +16,7 @@ const Header = ({ title, text }: HeroHeaderProps) => {
 
       <div className="absolute inset-0 bg-gradient-to-r from-schiphol-blue/80 to-transparent" />
 
-      <div className="absolute bottom-10 left-0 w-full text-white z-10">
+      <div className="absolute top-10 left-0 w-full text-white z-10">
         <Container>
           <h1 className="text-4xl font-bold font-neue-frutiger">{title}</h1>
           <p className="mt-2 text-lg font-neue-frutiger">{text}</p>
