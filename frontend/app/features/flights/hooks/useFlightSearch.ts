@@ -56,11 +56,13 @@ export const useFlightSearch = (flights: Flight[]) => {
     (query: string, sortBy: string) => {
       setIsSearching(true);
 
-      if (query.length >= MIN_QUERY_LENGTH || query.length === 0) {
+      if (query.length >= MIN_QUERY_LENGTH) {
         debouncedFilterFlights(query, sortBy);
       } else {
         setFilteredFlights([]);
-        setIsSearching(false);
+        if (query.length === 0) {
+          setIsSearching(false);
+        }
       }
     },
     [debouncedFilterFlights]

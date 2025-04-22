@@ -36,7 +36,7 @@ export default {
         "light-yellow": "#fdfbda",
       },
       fontFamily: {
-        "neue-frutiger": ["NeueFrutigerWorld-Regular", "sans-serif"],
+        "neue-frutiger": ["NeueFrutigerWorld", "sans-serif"],
         sans: [
           "Inter",
           "ui-sans-serif",

@@ -32,12 +32,13 @@ export const FlightSearchOverview = ({ flights }: FlightSearchOverviewProps) => 
   const [query, setQuery] = useState<string>("");
   const [sortBy, setSortBy] = useState<string>("date");
 
+  // Search (and sort) flights hook
   const { filteredFlights, isSearching, searchFlights } = useFlightSearch(flights);
 
-  // scroll results into view when they are available
+  // Scroll results into view when they are available
   useEffect(() => {
     if (filteredFlights.length > 0 && query.length >= MIN_QUERY_LENGTH) {
-      // scroll to the first card on mobile, last card on anything bigger
+      // Scroll to the first card on mobile, last card on anything bigger
       resultsRef.current?.scrollIntoView({
         behavior: "smooth",
         block: "center",
@@ -47,9 +48,7 @@ export const FlightSearchOverview = ({ flights }: FlightSearchOverviewProps) => 
   }, [filteredFlights, query]);
 
   useEffect(() => {
-    if (query.length >= MIN_QUERY_LENGTH) {
-      searchFlights(query, sortBy);
-    }
+    searchFlights(query, sortBy);
   }, [query, sortBy, searchFlights]);
 
   // Handle sorting change
@@ -130,7 +129,7 @@ export const FlightSearchOverview = ({ flights }: FlightSearchOverviewProps) => 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ ease: "easeIn", duration: 0.25, delay: 0.2 }}
-            className="text-xl text-center text-gray-400"
+            className="text-xl text-center text-gray-300 font-neue-frutiger"
             data-test-id="no-flights-results"
           >
             No flights found.

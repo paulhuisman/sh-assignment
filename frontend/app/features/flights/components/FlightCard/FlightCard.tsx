@@ -19,7 +19,7 @@ export const FlightCard = ({ flight }: FlightCardProps) => {
       >
         <div className="flex p-4 justify-between items-center">
           <h2
-            className="text-xl font-semibold text-schiphol-blue group-hover:text-white"
+            className="text-xl font-bold font-neue-frutiger text-schiphol-blue group-hover:text-white"
             data-test-id="flight-airport"
           >
             {flight.airport}
@@ -32,7 +32,7 @@ export const FlightCard = ({ flight }: FlightCardProps) => {
           </span>
         </div>
         <div className="px-4 py-3 bg-grey-scattered text-black rounded-br-lg rounded-bl-lg group-hover:bg-grey-scattered/80 transition-all  duration-300 ease-in-out">
-          <p className="text-base font-bold mb-2">{format(flight.date, "d MMMM yyyy")}</p>
+          <p className="text-sm font-bold mb-2">{format(flight.date, "d MMMM yyyy")}</p>
           <p className="text-sm">Expected time: {flight.expectedTime}</p>
           <p className="text-sm">Original time: {flight.originalTime}</p>
         </div>

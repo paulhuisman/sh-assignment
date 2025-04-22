@@ -3,12 +3,18 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: "NeueFrutigerWorld-Regular";
-  src: url("/fonts/NeueFrutigerWorld-Regular.ttf") format("truetype");
-  font-weight: 400;
+  font-family: "NeueFrutigerWorld";
+  src: url("/fonts/NeueFrutigerWorld-Bold.ttf") format("truetype");
+  font-weight: bold;
   font-style: normal;
 }
 
+@font-face {
+  font-family: "NeueFrutigerWorld";
+  src: url("/fonts/NeueFrutigerWorld-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
 html,
 body {
   @apply bg-white dark:bg-schiphol-blue;
