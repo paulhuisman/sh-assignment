@@ -14,7 +14,8 @@ To start client: `cd frontend && npm run start`
 
 ### Playwright e2e testing
 
-Setup playwright first by running `npm install @playwright/test`. Run e2e tests via `npx playwright test`. For a visual representation include the `--ui` parameter.
+- Setup playwright first by running `npm install @playwright/test`.
+- Run e2e tests via `npx playwright test`. For a visual representation include the `--ui` parameter.
 
 ## TODO
 
