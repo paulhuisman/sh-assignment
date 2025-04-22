@@ -23,8 +23,10 @@ export const links: LinksFunction = () => [
   },
   {
     rel: "preload",
-    href: "https://cdn.schiphol.nl/web/flights/assets/flight-search-asset-CjvqQkFT.png",
+    href: "assets/header.jpg",
     as: "image",
+    type: "image/jpeg",
+    imageSrcSet: "assets/header.jpg",
   },
 ];
 
