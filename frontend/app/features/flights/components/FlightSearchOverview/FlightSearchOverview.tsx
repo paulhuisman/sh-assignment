@@ -81,31 +81,29 @@ export const FlightSearchOverview = ({ flights }: FlightSearchOverviewProps) => 
                 onChange={handleSearchChange}
                 className="border bg-white text-black border-grey-broken p-3 rounded-lg w-full max-w-md bg-transparent placeholder-grey-storm focus:ring-2 focus:ring-afternoon-blue focus:outline-none"
               />
-              <AnimatePresence>
-                {query.length > 0 ? (
-                  <motion.button
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ ease: "easeIn", duration: 0.25, delay: 0.1 }}
-                    onClick={() => {
-                      setQuery("");
-                    }}
-                    className="absolute right-3  top-1/2 transform -translate-y-1/2 text-schiphol-blue hover:text-gray-800 transition"
-                  >
-                    <XMarkIcon className="size-5" />
-                  </motion.button>
-                ) : (
-                  <motion.div
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 1, x: -10 }}
-                    transition={{ ease: "easeIn", duration: 0.2 }}
-                  >
-                    <MagnifyingGlassIcon className="size-5 text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {query.length > 0 ? (
+                <motion.button
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ ease: "easeIn", duration: 0.25, delay: 0.1 }}
+                  onClick={() => {
+                    setQuery("");
+                  }}
+                  className="absolute right-3  top-1/2 transform -translate-y-1/2 text-schiphol-blue hover:text-gray-800 transition"
+                >
+                  <XMarkIcon className="size-5" />
+                </motion.button>
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 1, x: -10 }}
+                  transition={{ ease: "easeIn", duration: 0.2 }}
+                >
+                  <MagnifyingGlassIcon className="size-5 text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2" />
+                </motion.div>
+              )}
             </div>
           </div>
           <div className="mt-3 min-h-[20px]">
