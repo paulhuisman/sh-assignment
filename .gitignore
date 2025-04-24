@@ -4,5 +4,4 @@ backend/dist
 frontend/node_modules
 /.cache
 /build
-.env
 .DS_Store
