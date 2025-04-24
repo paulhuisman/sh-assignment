@@ -66,7 +66,7 @@
         "airport": "London Heathrow",
         "date": "2022-02-22",
         "expectedTime": "14:40",
-        "originalTime": "14:40",
+        "originalTime": "14:30",
         "url": "/en/departures/flight/D20190401KL1019/",
         "score": "153.7487"
     },

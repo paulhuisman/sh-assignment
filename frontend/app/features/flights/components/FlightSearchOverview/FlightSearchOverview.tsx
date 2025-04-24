@@ -2,7 +2,7 @@ import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { format } from "date-fns";
 import { AnimatePresence, motion } from "motion/react";
 import React, { useEffect, useRef, useState } from "react";
-import Container from "~/components/layout/Container/Container";
+import { Container } from "~/components/layout/Container";
 import { useFlightSearch } from "../../hooks/useFlightSearch";
 import { Flight } from "../../types";
 import { FlightCard } from "../FlightCard";
@@ -31,22 +31,10 @@ const cardVariants = {
 export const FlightSearchOverview = ({ flights }: FlightSearchOverviewProps) => {
   const resultsRef = useRef<HTMLDivElement | null>(null);
   const [query, setQuery] = useState<string>("");
-  const [sortBy, setSortBy] = useState<string>("date");
+  const [sortBy, setSortBy] = useState<"expectedTime" | "date">("date");
 
   // Search (and sort) flights hook
-  const { filteredFlights, isSearching, searchFlights } = useFlightSearch(flights);
-
-  // Group flights by date
-  const groupFlightsByDate = (flights: Flight[]) => {
-    return flights.reduce<Record<string, Flight[]>>((acc, flight) => {
-      const dateKey = format(new Date(flight.date), "yyyy-MM-dd");
-      if (!acc[dateKey]) {
-        acc[dateKey] = [];
-      }
-      acc[dateKey].push(flight);
-      return acc;
-    }, {});
-  };
+  const { filteredFlights, groupedFlights, isSearching, searchFlights } = useFlightSearch(flights);
 
   // Scroll results into view when they are available
   useEffect(() => {
@@ -66,7 +54,7 @@ export const FlightSearchOverview = ({ flights }: FlightSearchOverviewProps) => 
 
   // Handle sorting change
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSortBy(e.target.value);
+    setSortBy(e.target.value as "expectedTime" | "date");
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -147,7 +135,7 @@ export const FlightSearchOverview = ({ flights }: FlightSearchOverviewProps) => 
           </motion.div>
         ) : hasValidQuery ? (
           <>
-            <div className="flex justify-end mb-4 items-center gap-2 text-sm">
+            <div className="flex justify-end mb-6 items-center gap-2 text-sm">
               Sort by
               <select
                 value={sortBy}
@@ -167,28 +155,51 @@ export const FlightSearchOverview = ({ flights }: FlightSearchOverviewProps) => 
               transition={{ ease: "easeIn", duration: 0.25 }}
               ref={resultsRef}
             >
-              {Object.entries(groupFlightsByDate(filteredFlights))
-                .sort(([a], [b]) => a.localeCompare(b))
-                .map(([date, flightsForDate]) => (
-                  <div key={date} className="w-full">
-                    <h2 className="text-xl font-semibold text-off-white mb-4 w-full">
-                      {format(new Date(date), "EEEE d MMMM yyyy")}
-                    </h2>
-                    <motion.div
-                      className="flex flex-col gap-4 mb-8"
-                      variants={containerVariants}
-                      initial="hidden"
-                      animate="visible"
-                      exit="hidden"
-                    >
-                      {flightsForDate.map((flight) => (
-                        <motion.div key={flight.flightIdentifier} variants={cardVariants}>
-                          <FlightCard flight={flight} />
+              {sortBy === "date" ? (
+                <>
+                  {Object.entries(groupedFlights)
+                    .sort(([a], [b]) => a.localeCompare(b))
+                    .map(([date, flightsForDate]) => (
+                      <div key={date} className="w-full">
+                        <h2 className="text-xl font-semibold text-off-white mb-4 w-full">
+                          {format(new Date(date), "EEEE d MMMM yyyy")}
+                        </h2>
+                        <motion.div
+                          className="flex flex-col gap-4 mb-8"
+                          variants={containerVariants}
+                          initial="hidden"
+                          animate="visible"
+                          exit="hidden"
+                        >
+                          {flightsForDate.map((flight) => (
+                            <motion.div key={flight.flightIdentifier} variants={cardVariants}>
+                              <FlightCard flight={flight} />
+                            </motion.div>
+                          ))}
                         </motion.div>
-                      ))}
-                    </motion.div>
-                  </div>
-                ))}
+                      </div>
+                    ))}
+                </>
+              ) : (
+                <>
+                  {filteredFlights
+                    .slice()
+                    .sort(
+                      (a, b) =>
+                        new Date(`${a.date}T${a.expectedTime}`).getTime() -
+                        new Date(`${b.date}T${b.expectedTime}`).getTime()
+                    )
+                    .map((flight) => (
+                      <motion.div
+                        className="mb-4"
+                        key={flight.flightIdentifier}
+                        variants={cardVariants}
+                      >
+                        <FlightCard flight={flight} />
+                      </motion.div>
+                    ))}
+                </>
+              )}
             </motion.div>
           </>
         ) : null}

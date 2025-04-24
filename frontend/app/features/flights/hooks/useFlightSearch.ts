@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import _ from "lodash";
 import { useCallback, useMemo, useState } from "react";
 import { Flight } from "../types";
@@ -5,8 +6,11 @@ import { Flight } from "../types";
 const MIN_QUERY_LENGTH = 3;
 const DEBOUNCE_DELAY = 150;
 
+type GroupedFlights = Record<string, Flight[]>;
+
 export const useFlightSearch = (flights: Flight[]) => {
   const [filteredFlights, setFilteredFlights] = useState<Flight[]>([]);
+  const [groupedFlights, setGroupedFlights] = useState<GroupedFlights>({});
   const [isSearching, setIsSearching] = useState(false);
 
   const filterFlights = useCallback(
@@ -21,23 +25,27 @@ export const useFlightSearch = (flights: Flight[]) => {
         );
       });
 
-      // Apply sorting based on sortBy parameter
-      if (sortBy) {
-        filtered = [...filtered].sort((a, b) => {
-          if (sortBy === "date") {
-            // Sort by date
-            const aDate = new Date(a.date);
-            const bDate = new Date(b.date);
-            return aDate.getTime() - bDate.getTime();
-          } else if (sortBy === "expectedTime") {
-            // Sort by expected time (within the same date)
-            const aTime = new Date(`${a.date}T${a.expectedTime}`);
-            const bTime = new Date(`${b.date}T${b.expectedTime}`);
-            return aTime.getTime() - bTime.getTime();
-          }
-          // Return 0 if no sortBy or unrecognized sort field
-          return 0;
-        });
+      // Sort logic
+      filtered = [...filtered].sort((a, b) => {
+        if (sortBy === "expectedTime") {
+          // Not sure wether to include date or not for this feature
+          return new Date(`${a.expectedTime}`).getTime() - new Date(`${b.expectedTime}`).getTime();
+        } else {
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
+        }
+      });
+
+      // Group by date if sorting by date
+      if (sortBy === "date") {
+        const grouped = filtered.reduce<GroupedFlights>((acc, flight) => {
+          const dateKey = format(new Date(flight.date), "yyyy-MM-dd");
+          if (!acc[dateKey]) acc[dateKey] = [];
+          acc[dateKey].push(flight);
+          return acc;
+        }, {});
+        setGroupedFlights(grouped);
+      } else {
+        setGroupedFlights({});
       }
 
       setFilteredFlights(filtered);
@@ -46,7 +54,6 @@ export const useFlightSearch = (flights: Flight[]) => {
     [flights]
   );
 
-  // Debounced version of the filtering function
   const debouncedFilterFlights = useMemo(
     () => _.debounce(filterFlights, DEBOUNCE_DELAY),
     [filterFlights]
@@ -60,6 +67,7 @@ export const useFlightSearch = (flights: Flight[]) => {
         debouncedFilterFlights(query, sortBy);
       } else {
         setFilteredFlights([]);
+        setGroupedFlights({});
         if (query.length === 0) {
           setIsSearching(false);
         }
@@ -68,5 +76,5 @@ export const useFlightSearch = (flights: Flight[]) => {
     [debouncedFilterFlights]
   );
 
-  return { filteredFlights, isSearching, searchFlights };
+  return { filteredFlights, groupedFlights, isSearching, searchFlights };
 };

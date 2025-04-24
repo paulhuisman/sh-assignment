@@ -13,7 +13,7 @@ export const FlightCard = ({ flight }: FlightCardProps) => {
       data-test-id={`flight-card-${flight.flightIdentifier}`}
     >
       <a
-        href={`https://www.schiphol.nl/${flight.url}`}
+        href={`https://www.schiphol.nl${flight.url}`}
         target="_blank"
         rel="noopener noreferrer"
         title="View flight details"
