@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { Flight } from "../../types";
 
 type FlightCardProps = {
@@ -6,6 +5,8 @@ type FlightCardProps = {
 };
 
 export const FlightCard = ({ flight }: FlightCardProps) => {
+  const isDelayed = flight.expectedTime !== flight.originalTime;
+
   return (
     <div
       className="border rounded-lg shadow-sm bg-white group transition-all duration-300 ease-in-out hover:bg-afternoon-blue"
@@ -19,10 +20,18 @@ export const FlightCard = ({ flight }: FlightCardProps) => {
       >
         <div className="flex p-4 justify-between items-center">
           <h2
-            className="text-xl font-bold font-neue-frutiger text-schiphol-blue group-hover:text-white"
+            className="text-xl flex items-center gap-2.5 font-bold font-neue-frutiger text-schiphol-blue group-hover:text-white"
             data-test-id="flight-airport"
           >
-            {flight.airport}
+            {isDelayed ? (
+              <span>
+                <span className="line-through text-gray-500 mr-2">{flight.originalTime}</span>
+                <span className="text-red-600">{flight.expectedTime}</span>
+              </span>
+            ) : (
+              <span>{flight.originalTime}</span>
+            )}
+            <span>{flight.airport}</span>
           </h2>
           <span
             className="bg-afternoon-blue/20 text-schiphol-blue px-2 py-1 rounded text-sm group-hover:text-white group-hover:bg-schiphol-blue transition-all  duration-300 ease-in-out"
@@ -30,11 +39,6 @@ export const FlightCard = ({ flight }: FlightCardProps) => {
           >
             {flight.flightNumber}
           </span>
-        </div>
-        <div className="px-4 py-3 bg-grey-scattered text-black rounded-br-lg rounded-bl-lg group-hover:bg-grey-scattered/80 transition-all  duration-300 ease-in-out">
-          <p className="text-sm font-bold mb-2">{format(flight.date, "d MMMM yyyy")}</p>
-          <p className="text-sm">Expected time: {flight.expectedTime}</p>
-          <p className="text-sm">Original time: {flight.originalTime}</p>
         </div>
       </a>
     </div>

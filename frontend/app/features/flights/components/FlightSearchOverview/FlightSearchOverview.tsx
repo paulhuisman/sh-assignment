@@ -1,4 +1,5 @@
 import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { format } from "date-fns";
 import { AnimatePresence, motion } from "motion/react";
 import React, { useEffect, useRef, useState } from "react";
 import Container from "~/components/layout/Container/Container";
@@ -35,6 +36,18 @@ export const FlightSearchOverview = ({ flights }: FlightSearchOverviewProps) => 
   // Search (and sort) flights hook
   const { filteredFlights, isSearching, searchFlights } = useFlightSearch(flights);
 
+  // Group flights by date
+  const groupFlightsByDate = (flights: Flight[]) => {
+    return flights.reduce<Record<string, Flight[]>>((acc, flight) => {
+      const dateKey = format(new Date(flight.date), "yyyy-MM-dd");
+      if (!acc[dateKey]) {
+        acc[dateKey] = [];
+      }
+      acc[dateKey].push(flight);
+      return acc;
+    }, {});
+  };
+
   // Scroll results into view when they are available
   useEffect(() => {
     if (filteredFlights.length > 0 && query.length >= MIN_QUERY_LENGTH) {
@@ -64,7 +77,7 @@ export const FlightSearchOverview = ({ flights }: FlightSearchOverviewProps) => 
   const hasValidQuery = query.length >= MIN_QUERY_LENGTH;
 
   return (
-    <Container>
+    <Container className="lg:max-w-4xl">
       <div className="relative flex justify-center items-center w-full -mt-36">
         <div className="bg-grey-few mb-10 lg:mb-16 z-40 rounded-md shadow-md px-4 lg:px-24 pt-12 pb-0 lg:pb-6 w-full lg:w-[600px]">
           <div className="flex flex-col gap-8 items-center justify-center relative w-full">
@@ -146,7 +159,7 @@ export const FlightSearchOverview = ({ flights }: FlightSearchOverviewProps) => 
               </select>
             </div>
             <motion.div
-              className="grid gap-4 lg:gap-6 lg:grid-cols-2 min-h-[300px]"
+              className="flex flex-col w-full"
               variants={containerVariants}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -154,11 +167,28 @@ export const FlightSearchOverview = ({ flights }: FlightSearchOverviewProps) => 
               transition={{ ease: "easeIn", duration: 0.25 }}
               ref={resultsRef}
             >
-              {filteredFlights.map((flight, i) => (
-                <motion.div key={flight.flightIdentifier} variants={cardVariants}>
-                  <FlightCard flight={flight} />
-                </motion.div>
-              ))}
+              {Object.entries(groupFlightsByDate(filteredFlights))
+                .sort(([a], [b]) => a.localeCompare(b))
+                .map(([date, flightsForDate]) => (
+                  <div key={date} className="w-full">
+                    <h2 className="text-xl font-semibold text-off-white mb-4 w-full">
+                      {format(new Date(date), "EEEE d MMMM yyyy")}
+                    </h2>
+                    <motion.div
+                      className="flex flex-col gap-4 mb-8"
+                      variants={containerVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="hidden"
+                    >
+                      {flightsForDate.map((flight) => (
+                        <motion.div key={flight.flightIdentifier} variants={cardVariants}>
+                          <FlightCard flight={flight} />
+                        </motion.div>
+                      ))}
+                    </motion.div>
+                  </div>
+                ))}
             </motion.div>
           </>
         ) : null}
