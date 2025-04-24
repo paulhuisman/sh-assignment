@@ -21,6 +21,11 @@ The Remix frontend application fetching the flights server side and rendering.
 - Setup playwright first by running `npm install @playwright/test`.
 - Run e2e tests via `npx playwright test`. For a visual representation include the `--ui` parameter.
 
+### ESLint
+
+- `npm run lint`
+
 ## TODO
 
 - Path alias (~/) is not working correctly
+- Run lint on commit
