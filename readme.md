@@ -4,13 +4,17 @@
 
 This is serving the flights.json as an api endpoint via Express.
 
-To start server: `cd backend && npm run start`
+- Navigate to folder: `cd backend`
+- Install packages: `npm install`
+- Start server: `npm run dev` or `npm run start`
 
 ## Frontend
 
 The Remix frontend application fetching the flights server side and rendering.
 
-To start client: `cd frontend && npm run start`
+- Navigate to folder: `cd frontend`
+- Install packages: `npm install`
+- Start server: `npm run dev` or `npm run start`
 
 ### Playwright e2e testing
 
